@@ -12,10 +12,7 @@ class ProjectsSection extends StatefulWidget {
 }
 
 class _ProjectsSectionState extends State<ProjectsSection> {
-  // 1. Add the ScrollController
   final ScrollController _scrollController = ScrollController();
-  
-  // The width of one card (350) + the SizedBox width (24)
   final double _scrollAmount = 374.0;
 
   @override
@@ -24,105 +21,166 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     super.dispose();
   }
 
-  // 2. Scroll logic
   void _scroll(double amount) {
+    if (!_scrollController.hasClients) return;
+
+    final targetOffset = (_scrollController.offset + amount).clamp(
+      0.0,
+      _scrollController.position.maxScrollExtent,
+    );
+
     _scrollController.animateTo(
-      _scrollController.offset + amount,
+      targetOffset,
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeInOut,
     );
   }
 
+  Future<void> _openUrl(String url) async {
+    final uri = Uri.tryParse(url.trim());
+
+    if (uri == null || !uri.hasScheme) return;
+
+    try {
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+    } catch (e) {
+      debugPrint('Could not open URL: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDesktop = ResponsiveLayout.isDesktop(context);
+
     final padding = isDesktop
         ? const EdgeInsets.symmetric(horizontal: 100, vertical: 80)
         : const EdgeInsets.symmetric(horizontal: 24, vertical: 40);
 
     return Container(
       width: double.infinity,
-      color: Theme.of(context).colorScheme.surface, // Alternating background
+      color: Theme.of(context).colorScheme.surface,
       padding: padding,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // --- MULTI-SHADE BRONZE GRADIENT FOR MAIN TITLE ---
           ShaderMask(
             shaderCallback: (bounds) => const LinearGradient(
               colors: [
-                Color(0xFF5D3C3C), // Dark Brown
-                Color(0xFFC67A3D), // Neon Bronze/Copper
-                Color(0xFF5D3C3C), // Dark Brown
+                Color(0xFF5D3C3C),
+                Color(0xFFC67A3D),
+                Color(0xFF5D3C3C),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ).createShader(bounds),
             child: Text(
-              "Selected Projects",
+              " Projects",
               style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                color: Colors.white, // Must be white for gradient to show
-                fontWeight: FontWeight.bold,
-              ),
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
           ),
           const SizedBox(height: 40),
-          
-          // 3. Wrap SingleChildScrollView in a Stack to float the arrows
+
           Stack(
             alignment: Alignment.center,
             children: [
               SingleChildScrollView(
-                controller: _scrollController, // Attach controller here
+                controller: _scrollController,
                 scrollDirection: Axis.horizontal,
-                // Added some padding so the cards don't get hidden behind the arrows
-                padding: EdgeInsets.symmetric(horizontal: isDesktop ? 40 : 10), 
+                padding: EdgeInsets.symmetric(
+                  horizontal: isDesktop ? 40 : 10,
+                ),
                 child: Row(
                   children: [
                     _buildProjectCard(
                       context,
-                      "Gym Management App",
-                      "A complete shopping app built with Flutter and Firebase. Features include user authentication, product catalog, cart management, and payment gateway integration.",
-                      ["Flutter", "Firebase", "Provider", "Stripe"],
-                      const Color(0xFFC67A3D), // Copper accent
+                      "Custom POS Terminal",
+                      "A client-focused Point of Sale (POS) system developed and delivered using Flutter and Supabase. Includes inventory management, employee management, and recipe management, with cloud database integration to support daily business operations.",
+                      ["Flutter", "Dart", "Riverpod", "Supabase"],
+                      const Color(0xFFC67A3D),
                       "",
                       "",
+                      imageUrl:"https://raw.githubusercontent.com/mutahiraasadd-hub/portfolio-assets/main/custom-pos/Screenshot%202026-11-11%20004813.png",
+                      screenshotsUrl: "https://github.com/mutahiraasadd-hub/portfolio-assets/tree/main/custom-pos",
+                      projectLabel: "Client Project",
                     ),
+
                     const SizedBox(width: 24),
+
                     _buildProjectCard(
                       context,
-                      "Ai Fitness app",
-                      "An AI-powered mobile app that detects plant diseases from leaf images using a custom ResNet model trained on PyTorch. Integrated via TFLite.",
-                      ["Flutter", "PyTorch", "ResNet", "TFLite"],
-                      const Color(0xFFA0522D), // Sienna accent
+                      "Veterinary Clinic Website",
+                      "A production-ready Flutter web application for veterinary clinics, featuring responsive UI, Supabase authentication and database integration, clinic location and directions through maps, and WhatsApp integration for appointment inquiries.",
+                      [
+                        "Flutter",
+                        "Supabase",
+                        "Flutter Maps",
+                        "WhatsApp API"
+                      ],
+                      const Color(0xFFA0522D),
                       "",
                       "",
+                      imageUrl:"https://raw.githubusercontent.com/mutahiraasadd-hub/portfolio-assets/main/veterinary-clinic/Screenshot%202026-10-16%20021430.png",
+                      screenshotsUrl: "https://github.com/mutahiraasadd-hub/portfolio-assets/tree/main/veterinary-clinic",
+                      projectLabel: "Client Project",
                     ),
+
                     const SizedBox(width: 24),
+
+                    _buildProjectCard(
+                      context,
+                      "Gym Management ",
+                      "Collaborated on developing a gym management SAAS Tool that helps manage member records, track membership fee status, and can send custom reminders to gym members. Implemented CRUD operations and integrated Supabase for authentication, cloud data storage, and real-time updates.",
+                      ["Flutter", "Dart", "Supabase", "Provider"],
+                      const Color(0xFFC67A3D),
+                      "",
+                      "",
+                     imageUrl: "https://raw.githubusercontent.com/mutahiraasadd-hub/portfolio-assets/dba8c180f4f2bd17085bd5a5c7048c7e204b2bc5/gym-management/Screenshot%202026-11-10%20234650.png",                      screenshotsUrl: "https://github.com/mutahiraasadd-hub/portfolio-assets/tree/main/gym-management",
+                      projectLabel: "Collaborative Development",
+                    ),
+
+                    const SizedBox(width: 24),
+
+                    _buildProjectCard(
+                      context,
+                      "FitSage – AI Fitness App",
+                      "A collaborative AI-powered fitness and nutrition app featuring personalized macro calculations and food recognition. Contributed to integrating a custom EfficientNetB0 model trained on a 110-class food dataset, achieving 88.46% classification accuracy, along with CalorieNinjas API integration for nutritional information.",
+                      [
+                        "Flutter",
+                        "Firebase",
+                        "EfficientNetB0",
+                        "CalorieNinjas API"
+                      ],
+                      const Color(0xFFA0522D),
+                      "",
+                      "",
+                      screenshotsUrl: "https://github.com/mutahiraasadd-hub/portfolio-assets/tree/main/fitsage",
+                      imageUrl: "https://raw.githubusercontent.com/mutahiraasadd-hub/portfolio-assets/main/fitsage/WhatsApp%20Image%202026-11-11%20at%2002.00.31.jpeg", 
+                      projectLabel: "Team Collaboration",
+                    ),
+
+                    const SizedBox(width: 24),
+
                     _buildProjectCard(
                       context,
                       "Portfolio Website",
-                      "A high-performance responsive web portfolio built with Flutter Web. Features a clean light theme, glassmorphism UI, and animated elements.",
-                      ["Flutter Web", "GoRouter", "Animate"],
-                      const Color(0xFF8B5A2B), // Rich Ochre accent
+                      "A responsive web portfolio built with Flutter Web, featuring a clean interface, glassmorphism styling, and animated elements to present projects and development skills.",
+                      ["Flutter Web", "Dart", "Responsive UI"],
+                      const Color(0xFF8B5A2B),
+                      "https://github.com/mutahiraasadd-hub/my-portfolio",
                       "",
-                      "",
+                      screenshotsUrl: "",
+                      imageUrl: "https://raw.githubusercontent.com/mutahiraasadd-hub/portfolio-assets/main/portfolioimage/Screenshot%202026-11-11%20020507.png"
                     ),
-                  //  const SizedBox(width: 24),
-             //       _buildProjectCard(
-                 //     context,
-                //      "Java POS Terminal",
-                //      "A Point of Sale (POS) terminal application built with Java. Features include inventory management, order processing, and sales reporting.",
-                //      ["Java", "MySQL", "Desktop App"],
-                 //     const Color(0xFFCD853F), // Peru/Warm Brown accent
-                //      "https://github.com/Hasnat-Akbar/pos_trminal",
-                 //     "",
-                //    ),
-               ],
-               ),
-             ),
+                  ],
+                ),
+              ),
 
-              // --- Left Arrow ---
               Positioned(
                 left: 0,
                 child: _buildArrowButton(
@@ -131,7 +189,6 @@ class _ProjectsSectionState extends State<ProjectsSection> {
                 ),
               ),
 
-              // --- Right Arrow ---
               Positioned(
                 right: 0,
                 child: _buildArrowButton(
@@ -146,11 +203,13 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     );
   }
 
-  // --- Styled Arrow Button ---
-  Widget _buildArrowButton({required IconData icon, required VoidCallback onTap}) {
+  Widget _buildArrowButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.9), // Glass effect
+        color: Colors.white.withOpacity(0.9),
         shape: BoxShape.circle,
         boxShadow: [
           BoxShadow(
@@ -163,7 +222,7 @@ class _ProjectsSectionState extends State<ProjectsSection> {
       ),
       child: IconButton(
         icon: Icon(icon, size: 20),
-        color: const Color(0xFF5D3C3C), // Dark brown to match your theme
+        color: const Color(0xFF5D3C3C),
         onPressed: onTap,
       ),
     );
@@ -176,141 +235,225 @@ class _ProjectsSectionState extends State<ProjectsSection> {
     List<String> tags,
     Color accentColor,
     String githubUrl,
-    String liveDemo,
-  ) {
+    String liveDemo, {
+    String screenshotsUrl = "",
+    String imageUrl = "", // Added imageUrl here
+    String? projectLabel,
+  }) {
     return SizedBox(
       width: 350,
       height: 450,
       child: GlassContainer(
         borderRadius: BorderRadius.circular(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Placeholder Image Area
-            Container(
-              height: 180,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                color: accentColor.withOpacity(0.15), // Softer background for light theme
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.image,
-                  size: 50,
-                  color: accentColor.withOpacity(0.6),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary, // Rich brown title
-              ),
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: Text(
-                description,
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  // --- FIX FOR INVISIBLE TEXT ---
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75), 
-                  height: 1.5,
-                ),
-                maxLines: 4,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: tags
-                  .map(
-                    (tag) => Chip(
-                      label: Text(
-                        tag, 
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Theme.of(context).colorScheme.primary, // Dark text for readability
-                          fontWeight: FontWeight.w600,
-                        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: _ProjectCardContent(
+            title: title,
+            description: description,
+            tags: tags,
+            accentColor: accentColor,
+            githubUrl: githubUrl,
+            liveDemo: liveDemo,
+            screenshotsUrl: screenshotsUrl,
+            imageUrl: imageUrl, // Passed imageUrl here
+            projectLabel: projectLabel,
+            onOpenUrl: _openUrl,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProjectCardContent extends StatefulWidget {
+  final String title;
+  final String description;
+  final List<String> tags;
+  final Color accentColor;
+  final String githubUrl;
+  final String liveDemo;
+  final String imageUrl;
+  final String screenshotsUrl;
+  final String? projectLabel;
+  final Function(String) onOpenUrl;
+
+  const _ProjectCardContent({
+    required this.title,
+    required this.description,
+    required this.tags,
+    required this.accentColor,
+    required this.githubUrl,
+    required this.liveDemo,
+    this.imageUrl = "",
+    required this.screenshotsUrl,
+    this.projectLabel,
+    required this.onOpenUrl,
+  });
+
+  @override
+  State<_ProjectCardContent> createState() => _ProjectCardContentState();
+}
+
+class _ProjectCardContentState extends State<_ProjectCardContent> {
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasGithub = widget.githubUrl.trim().isNotEmpty;
+    final hasLiveDemo = widget.liveDemo.trim().isNotEmpty;
+    final hasScreenshots = widget.screenshotsUrl.trim().isNotEmpty;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 120,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: widget.accentColor.withOpacity(0.15),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: widget.imageUrl.trim().isNotEmpty
+                ? Image.network(
+                    widget.imageUrl,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Center(
+                      child: Icon(
+                        Icons.broken_image_outlined,
+                        size: 40,
+                        color: widget.accentColor.withOpacity(0.6),
                       ),
-                      backgroundColor: accentColor.withOpacity(0.15),
-                      side: BorderSide.none,
-                      labelPadding: const EdgeInsets.symmetric(horizontal: 8),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
                   )
-                  .toList(),
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomButton(
-                    label: "View Code",
-                    isOutlined: true,
-                    onPressed: () async {
-                      final url = githubUrl.trim();
-                      if (url.isNotEmpty) {
-                        final uri = Uri.parse(url);
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(
-                            uri,
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      } else {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Source code URL not available yet!',
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
+                : Center(
+                    child: Icon(
+                      Icons.image_outlined,
+                      size: 40,
+                      color: widget.accentColor.withOpacity(0.6),
+                    ),
                   ),
+          ),
+        ),
+
+        const SizedBox(height: 12),
+
+        Text(
+          widget.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+        ),
+
+        if (widget.projectLabel != null) ...[
+          const SizedBox(height: 4),
+          Text(
+            widget.projectLabel!,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                  color: widget.accentColor,
+                  fontWeight: FontWeight.w600,
                 ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: CustomButton(
-                    label: "Live Demo",
-                    isOutlined: true,
-                    onPressed: () async {
-                      final url = liveDemo.trim(); 
-                      if (url.isNotEmpty) {
-                        final uri = Uri.parse(url);
-                        if (await canLaunchUrl(uri)) {
-                          await launchUrl(
-                            uri,
-                            mode: LaunchMode.externalApplication,
-                          );
-                        }
-                      } else {
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Live Demo URL not available yet!', 
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                    },
+          ),
+        ],
+
+        const SizedBox(height: 8),
+
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.description,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface
+                            .withOpacity(0.75),
+                        height: 1.4,
+                      ),
+                  maxLines: _isExpanded ? null : 3,
+                  overflow: _isExpanded
+                      ? TextOverflow.visible
+                      : TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                GestureDetector(
+                  onTap: () => setState(() => _isExpanded = !_isExpanded),
+                  child: Text(
+                    _isExpanded ? "See Less" : "See More",
+                    style: TextStyle(
+                      color: widget.accentColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
                   ),
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+
+        const SizedBox(height: 8),
+
+        Wrap(
+          spacing: 6,
+          runSpacing: 4,
+          children: widget.tags
+              .map(
+                (tag) => Chip(
+                  label: Text(
+                    tag,
+                    style: TextStyle(
+                      fontSize: 10,
+                      color: Theme.of(context).colorScheme.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  backgroundColor: widget.accentColor.withOpacity(0.15),
+                  side: BorderSide.none,
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 4),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
+                ),
+              )
+              .toList(),
+        ),
+
+        if (hasGithub || hasLiveDemo || hasScreenshots) ...[
+          const SizedBox(height: 10),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: [
+              if (hasGithub)
+                CustomButton(
+                  label: "View Code",
+                  isOutlined: true,
+                  onPressed: () => widget.onOpenUrl(widget.githubUrl),
+                ),
+              if (hasLiveDemo)
+                CustomButton(
+                  label: "Live Demo",
+                  isOutlined: true,
+                  onPressed: () => widget.onOpenUrl(widget.liveDemo),
+                ),
+              if (hasScreenshots)
+                CustomButton(
+                  label: "View Screenshots",
+                  isOutlined: true,
+                  onPressed: () => widget.onOpenUrl(widget.screenshotsUrl),
+                ),
+            ],
+          ),
+        ],
+      ],
     );
   }
 }

@@ -54,14 +54,13 @@ class SkillsSection extends StatelessWidget {
                 Expanded(
                   child: _buildSkillCategory(
                     context,
-                    "AI & Machine Learning",
+                    "Web Development",
                     FontAwesomeIcons.brain,
                     [
-                      "Python",
-                      "TensorFlow",
-                      "PyTorch",
-                      "Model Training",
-                      "Jupyter",
+                      "HTML5",
+                      "CSS3",
+                      "Responsive Design",
+                      "Django",
                     ],
                   ),
                 ),
@@ -69,9 +68,9 @@ class SkillsSection extends StatelessWidget {
                 Expanded(
                   child: _buildSkillCategory(
                     context,
-                    "Backend & Legacy",
+                    "Backend & Database",
                     Icons.storage,
-                    [ "SQL", "REST APIs"],
+                    [ "SQL", "REST APIs","Firebase Firestore","Supabase"],
                   ),
                 ),
               ],
@@ -88,22 +87,21 @@ class SkillsSection extends StatelessWidget {
                 const SizedBox(height: 24),
                 _buildSkillCategory(
                   context,
-                  "AI & Machine Learning",
+                  "Web Development",
                   FontAwesomeIcons.brain,
                   [
-                    "Python",
-                    "TensorFlow",
-                    "PyTorch",
-                    "Model Training",
-                    "Jupyter",
+                    "HTML5",
+                    "CSS3",
+                    "Django",
+                    "Responsive Design",
                   ],
                 ),
                 const SizedBox(height: 24),
                 _buildSkillCategory(
                   context,
-                  "Backend & Legacy",
+                  "Backend & Database",
                   Icons.storage,
-                  ["Java", "SQL", "REST APIs", "Git"],
+                  [ "REST APIs", "Git","Firebase Firestore","Supabase"],
                 ),
               ],
             ),
@@ -115,7 +113,7 @@ class SkillsSection extends StatelessWidget {
   Widget _buildSkillCategory(
     BuildContext context,
     String title,
-    IconData icon,
+    dynamic icon, // Changed to dynamic to support both IconData and FaIconData
     List<String> skills,
   ) {
     return GlassContainer(
@@ -124,11 +122,17 @@ class SkillsSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: const Color(0xFFC67A3D), // Glowing copper for the icons
-                size: 28,
-              ),
+              icon is IconData
+                  ? Icon(
+                      icon,
+                      color: const Color(0xFFC67A3D),
+                      size: 28,
+                    )
+                  : FaIcon(
+                      icon,
+                      color: const Color(0xFFC67A3D),
+                      size: 28,
+                    ),
               const SizedBox(width: 12),
               Expanded(
                 // --- GRADIENT FOR CATEGORY TITLES ---

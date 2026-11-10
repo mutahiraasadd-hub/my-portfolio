@@ -187,17 +187,17 @@ class _ContactSectionState extends State<ContactSection> {
   }
 
   // --- UPDATED SOCIAL ICONS ---
-  Widget _buildSocialIcon(BuildContext context, IconData icon, String url) {
+  Widget _buildSocialIcon(BuildContext context, dynamic icon, String url) {
     return IconButton(
       onPressed: () async {
-final Uri uri=Uri.parse(url);
-if (await canLaunchUrl(uri)){
-  await launchUrl(uri,mode: LaunchMode.externalApplication);
+        final Uri uri=Uri.parse(url);
+        if (await canLaunchUrl(uri)){
+          await launchUrl(uri,mode: LaunchMode.externalApplication);
 
-} else{
-  debugPrint('Could not launch $url');
-}
-}, // TODO: Launch URL
+        } else{
+          debugPrint('Could not launch $url');
+        }
+      },
       icon: FaIcon(icon, size: 32),
       // Base color is a soft dark brown
       color: Theme.of(context).colorScheme.primary.withOpacity(0.8),
@@ -226,7 +226,7 @@ if (await canLaunchUrl(uri)){
       final response = await http.post(
         url,
         headers: {
-          'origin': 'http://localhost', // Required for some API calls
+          'Origin': 'http://localhost',
           'Content-Type': 'application/json',
         },
         body: jsonEncode({

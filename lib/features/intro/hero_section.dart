@@ -36,6 +36,7 @@ class HeroSection extends StatelessWidget {
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                     color: Theme.of(context).colorScheme.primary, 
                   ),
+                  
                 ).animate().fadeIn(duration: 600.ms).slideX(),
                 const SizedBox(height: 20),
                 SizedBox(
@@ -43,7 +44,7 @@ class HeroSection extends StatelessWidget {
                   child: AnimatedTextKit(
                     animatedTexts: [
                       TypewriterAnimatedText(
-                        "Building Cross-Platform Apps\n& Intelligent Models.",
+                        "Building Mobile & Web Applications",
                         textStyle: Theme.of(context).textTheme.displayLarge
                             ?.copyWith(
                               fontWeight: FontWeight.bold,
@@ -58,7 +59,7 @@ class HeroSection extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  "Flutter Developer | Machine Learning Enthusiast",
+                  "Flutter Developer | Full-Stack Developer",
                   style: Theme.of(
                     context,
                   ).textTheme.titleLarge?.copyWith(
@@ -72,15 +73,14 @@ class HeroSection extends StatelessWidget {
                       label: "Download Resume",
                       icon: FontAwesomeIcons.download,
                       onPressed: () async {
-final url=Uri.parse("https://raw.githubusercontent.com/mutahiraasadd-hub/my-resume/main/mutahira's_cv.pdf");
+                        final url=Uri.parse("https://github.com/mutahiraasadd-hub/my-resume/blob/main/Mutahira's%20cv.pdf");
 
-if(await canLaunchUrl(url)){
-  await launchUrl(url,mode: LaunchMode.externalApplication);
-}
-else{
-  debugPrint('Could not launch resume URL');
-}
-
+                        if(await canLaunchUrl(url)){
+                          await launchUrl(url,mode: LaunchMode.externalApplication);
+                        }
+                        else{
+                          debugPrint('Could not launch resume URL');
+                        }
                       }, 
                     ),
                     const SizedBox(width: 20),
@@ -101,11 +101,12 @@ else{
               child: Container(
                 height: 400,
                 width: 400,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white.withOpacity(0.3), // The physical circle
                 ),
-                child: Icon(
+                child: FaIcon(
                   FontAwesomeIcons.robot,
                   size: 150,
                   color: Theme.of(context).colorScheme.primary, // Base brown color
@@ -155,11 +156,12 @@ else{
             child: Container(
               height: 200, 
               width: 200,
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white.withOpacity(0.3),
               ),
-              child: Icon(
+              child: FaIcon(
                 FontAwesomeIcons.robot,
                 size: 80, 
                 color: Theme.of(context).colorScheme.primary,
@@ -228,7 +230,16 @@ else{
               CustomButton(
                 label: "Download Resume",
                 icon: FontAwesomeIcons.download,
-                onPressed: () {},
+                onPressed: () async {
+                  final url=Uri.parse("https://github.com/mutahiraasadd-hub/my-resume/blob/main/Mutahira's%20cv.pdf");
+
+                  if(await canLaunchUrl(url)){
+                    await launchUrl(url,mode: LaunchMode.externalApplication);
+                  }
+                  else{
+                    debugPrint('Could not launch resume URL');
+                  }
+                },
               ),
               const SizedBox(height: 16),
               CustomButton(

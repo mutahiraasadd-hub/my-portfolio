@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CustomButton extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
-  final IconData? icon;
+  final dynamic icon; // <-- Changed from IconData? to dynamic
   final bool isOutlined;
 
   const CustomButton({
@@ -27,7 +28,12 @@ class CustomButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        icon: icon != null ? Icon(icon, color: color) : const SizedBox.shrink(),
+        // --- Conditionally render standard Icon or FaIcon ---
+        icon: icon != null 
+            ? (icon is IconData 
+                ? Icon(icon, color: color) 
+                : FaIcon(icon, color: color)) 
+            : const SizedBox.shrink(),
         label: Text(label, style: TextStyle(color: color)),
       );
     }
@@ -42,7 +48,12 @@ class CustomButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
-      icon: icon != null ? Icon(icon) : const SizedBox.shrink(),
+      // --- Conditionally render standard Icon or FaIcon ---
+      icon: icon != null 
+          ? (icon is IconData 
+              ? Icon(icon) 
+              : FaIcon(icon)) 
+          : const SizedBox.shrink(),
       label: Text(label),
     );
   }
